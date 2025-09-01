@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Maps Search Links</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="./popper.min.js"></script>
+  <script src="./bootstrap.min.js"></script>
+  <style>
+    :root {
+      --body-color: #1a1a1a;
+      --collapse-bg: #F7F7F7;
+      --collapse-color: #1a1a1a;
+      --collapse-line-color: #acacde;
+      --collapse-icon-color: #b8336a;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      color: var(--body-color);
+      background: #ffffff;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .search-box {
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    details {
+      background: var(--collapse-bg);
+      color: var(--collapse-color);
+      border-radius: 8px;
+      margin: 10px 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    summary {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      padding: 1rem;
+      font-weight: bold;
+    }
+
+    .details-info {
+      border-top: 1px solid var(--collapse-line-color);
+      padding: 1rem;
+      word-break: break-word;
+    }
+
+    button {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .searchicon, .clearicon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .clearicon {
+      fill: #999;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    button:hover {
+      background: #999;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .details-info {
+        padding: 0.5rem;
+      }
+      .container {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container text-center">
+  <a href="Index.html"><img src="images/refresh.png"></a></br>
+  </br>
+  <h2><b><span style='background:rgb(0, 200, 122)'>Create Maps Search Links</span></b></h2>
+  </br>
+  <a href="https://maps.google.com/" target="_blank"><img src="images/googlemapsicon.png" style="width:100px;height:100px;"></a>
+</div>
+
+<div class="col-md-6 offset-md-3 mt-4">
+  <div class="input-group mb-3">
+    <input type="text" id="coordInput" class="form-control" placeholder="Enter coordinates: Latitude,Longitude" aria-label="Coordinates">
+    <div class="input-group-append">
+      <!-- Clear Button -->
+      <button class="btn btn-outline-secondary" id="clearBtn">
+        <svg class="clearicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z"/>
+        </svg>
+      </button>
+      <!-- Search Button -->
+      <button class="btn btn-outline-secondary" id="searchBtn">
+        <svg class="searchicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6 .1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="errorMsg" class="error-message hidden">Invalid input. Please enter coordinates in the format: Latitude,Longitude</div>
+
+  <!-- Google Maps -->
+  <details id="section1" class="hidden">
+    <summary><img src="images/googlemaps.png" style="height:26px;"></summary>
+    <div class="details-info" id="sectionDetails1"></div>
+  </details>
+
+  <!-- Apple Maps -->
+  <details id="section2" class="hidden">
+    <summary><img src="images/applemaps.png" style="height:26px;"></summary>
+    <div class="details-info" id="sectionDetails2"></div>
+  </details>
+
+  <!-- Bing Maps -->
+  <details id="section3" class="hidden">
+    <summary><img src="images/bingmaps.png" style="height:26px;"></summary>
+    <div class="details-info" id="sectionDetails3"></div>
+  </details>
+
+  <!-- Esri ArcGIS Maps -->
+  <details id="section4" class="hidden">
+    <summary><img src="images/arcgismaps.png" style="height:26px;"></summary>
+    <div class="details-info" id="sectionDetails4"></div>
+  </details>
+</div>
+
+<script>
+  const coordInput = document.getElementById("coordInput");
+  const clearBtn = document.getElementById("clearBtn");
+  const searchBtn = document.getElementById("searchBtn");
+  const errorMsg = document.getElementById("errorMsg");
+
+  function parseCoordinates(input) {
+    const parts = input.split(",");
+    if (parts.length !== 2) return null;
+    const lat = parseFloat(parts[0].trim());
+    const lng = parseFloat(parts[1].trim());
+    if (isNaN(lat) || isNaN(lng)) return null;
+    return { lat, lng };
+  }
+
+  function generateLinks() {
+    const coords = parseCoordinates(coordInput.value);
+    if (!coords) {
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+    errorMsg.classList.add("hidden");
+
+    const { lat, lng } = coords;
+
+    // Google Maps
+    document.getElementById("sectionDetails1").innerHTML = `
+      <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target='_blank'>Google Maps: Map View</a><br><br>
+      <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+      <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target='_blank'>Google Maps: Satellite View</a>
+    `;
+    document.getElementById("section1").classList.remove("hidden");
+
+    // Apple Maps
+    document.getElementById("sectionDetails2").innerHTML = `
+      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target='_blank'>Apple Maps: Map View</a><br><br>
+      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target='_blank'>Apple Maps: Satellite View</a>
+    `;
+    document.getElementById("section2").classList.remove("hidden");
+
+    // Bing Maps
+    document.getElementById("sectionDetails3").innerHTML = `
+      <a href="https://www.bing.com/maps?q=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://www.bing.com/maps?q=${lat},${lng}" target='_blank'>Bing Maps: Map View</a><br><br>
+      <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target='_blank'>Bing Maps: Satellite View</a>
+    `;
+    document.getElementById("section3").classList.remove("hidden");
+
+    // Esri ArcGIS Maps (swap order: lng,lat)
+    document.getElementById("sectionDetails4").innerHTML = `
+      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
+      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Satellite View</a>
+    `;
+    document.getElementById("section4").classList.remove("hidden");
+  }
+
+  searchBtn.addEventListener("click", generateLinks);
+
+  coordInput.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+      generateLinks();
+    }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    coordInput.value = "";
+    errorMsg.classList.add("hidden");
+    ["section1","section2","section3","section4"].forEach(id =>
+      document.getElementById(id).classList.add("hidden")
+    );
+  });
+</script>
+</body>
+</html>

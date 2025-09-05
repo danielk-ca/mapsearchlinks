@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Maps Search Links</title>
+  <title>Create Map Search Links</title>
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <link rel="stylesheet" href="bootstrap.min.css">
   <script src="./popper.min.js"></script>
@@ -63,7 +63,6 @@
     .details-info {
       border-top: 1px solid var(--collapse-line-color);
       padding: 1rem;
-      word-break: break-word;
     }
 
     button {
@@ -114,14 +113,75 @@
 <div class="container text-center">
   <a href="Index.html"><img src="images/refresh.png"></a></br>
   </br>
-  <h2><b><span style='background:rgb(0, 200, 122)'>Create Maps Search Links</span></b></h2>
+  <h2><b><span style='background:rgb(0, 200, 122)'>Create Map Search Links</span></b></h2>
   </br>
-  <a href="https://maps.google.com/" target="_blank"><img src="images/googlemapsicon.png" style="width:100px;height:100px;"></a>
-</div>
+  <a href="https://maps.google.com/" target="_blank"><img src="images/googlemapsicon.png" style="height:75px;"></a></br>
+  </br>
 
 <div class="col-md-6 offset-md-3 mt-4">
+<h4><b><span style='background:rgb(169, 213, 181)'>Search by Query</span></b></h4>
+</br>
+
   <div class="input-group mb-3">
-    <input type="text" id="coordInput" class="form-control" placeholder="Enter coordinates: Latitude,Longitude" aria-label="Coordinates">
+    <input type="text" id="queryInput" class="form-control" placeholder="Enter Query" aria-label="Query">
+    <div class="input-group-append">
+      <!-- Clear Button -->
+      <button class="btn btn-outline-secondary" id="clearBtnQuery">
+        <svg class="clearicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z"/>
+        </svg>
+      </button>
+      <!-- Search Button -->
+      <button class="btn btn-outline-secondary" id="searchBtnQuery">
+        <svg class="searchicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6 .1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Google Maps -->
+  <details id="Querysection1" class="hidden">
+    <summary>
+        <img src="images/googlemaps.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails1"></div>
+  </details>
+
+  <!-- Apple Maps -->
+  <details id="Querysection2" class="hidden">
+    <summary>
+        <img src="images/applemaps.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails2"></div>
+  </details>
+
+  <!-- Bing Maps -->
+  <details id="Querysection3" class="hidden">
+    <summary>
+        <img src="images/bingmaps.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails3"></div>
+  </details>
+
+  <!-- Esri ArcGIS Maps -->
+  <details id="Querysection4" class="hidden">
+    <summary>
+        <img src="images/arcgismaps.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails4"></div>
+  </details>
+
+<hr/>
+
+<h4><b><span style='background:rgb(169, 213, 181)'>Search by Coordinates</span></b></h4>
+</br>
+<img src="images/coordinates.png" style="height:75px;"></a></br>
+<b><span style='color:rgb(26, 115, 232);font-size: 1rem;'>Enter location as comma-separated latitude/longitude coordinates</span></b></br>
+</br>
+
+  <div class="input-group mb-3">
+    <input type="text" id="coordInput" class="form-control" placeholder="Enter coordinates" aria-label="Coordinates">
     <div class="input-group-append">
       <!-- Clear Button -->
       <button class="btn btn-outline-secondary" id="clearBtn">
@@ -162,85 +222,213 @@
     <summary><img src="images/arcgismaps.png" style="height:26px;"></summary>
     <div class="details-info" id="sectionDetails4"></div>
   </details>
+
 </div>
 
 <script>
-  const coordInput = document.getElementById("coordInput");
-  const clearBtn = document.getElementById("clearBtn");
-  const searchBtn = document.getElementById("searchBtn");
-  const errorMsg = document.getElementById("errorMsg");
 
-  function parseCoordinates(input) {
-    const parts = input.split(",");
-    if (parts.length !== 2) return null;
-    const lat = parseFloat(parts[0].trim());
-    const lng = parseFloat(parts[1].trim());
-    if (isNaN(lat) || isNaN(lng)) return null;
-    return { lat, lng };
-  }
+// JavaScript Section Start
 
-  function generateLinks() {
-    const coords = parseCoordinates(coordInput.value);
-    if (!coords) {
-      errorMsg.classList.remove("hidden");
-      return;
-    }
-    errorMsg.classList.add("hidden");
+// -------------------
+// Search by Query
+// -------------------
 
-    const { lat, lng } = coords;
+document.getElementById('clearBtnQuery').addEventListener('click', function() {
+  // Clear the textbox
+  document.getElementById('queryInput').value = '';
+  // Hide collapsible sections
+  ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id =>
+    document.getElementById(id).classList.add("hidden")
+  );
+});
 
-    // Google Maps
-    document.getElementById("sectionDetails1").innerHTML = `
-      <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target='_blank'>Google Maps: Map View</a><br><br>
-      <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-      <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target='_blank'>Google Maps: Satellite View</a>
-    `;
-    document.getElementById("section1").classList.remove("hidden");
+function performSearch() {
+  const textInput = document.getElementById('queryInput').value.trim();
 
-    // Apple Maps
-    document.getElementById("sectionDetails2").innerHTML = `
-      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target='_blank'>Apple Maps: Map View</a><br><br>
-      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target='_blank'>Apple Maps: Satellite View</a>
-    `;
-    document.getElementById("section2").classList.remove("hidden");
+  if (!textInput) return; // stop if empty
 
-    // Bing Maps
-    document.getElementById("sectionDetails3").innerHTML = `
-      <a href="https://www.bing.com/maps?q=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://www.bing.com/maps?q=${lat},${lng}" target='_blank'>Bing Maps: Map View</a><br><br>
-      <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target='_blank'>Bing Maps: Satellite View</a>
-    `;
-    document.getElementById("section3").classList.remove("hidden");
+  // Encode query
+  const encoded = encodeURIComponent(textInput)
+    .replace(/!/g, '%21') // Convert ! to %21
+    .replace(/\*/g, '%2A') // Convert * to %2A
+    .replace(/'/g, '%27') // Convert ' to %27
+    .replace(/\(/g, '%28') // Convert ( to %28
+    .replace(/\)/g, '%29') // Convert ) to %29
+    .replace(/-/g, '-') // Convert - to - (Do Nothing) ----- If URL Encoding Desired, change to: .replace(/-/g, '%2D')
+    .replace(/_/g, '_') // Convert _ to _ (Do Nothing) ----- If URL Encoding Desired, change to: .replace(/_/g, '%5F')
+    .replace(/\./g, '.') // Convert . to . (Do Nothing) ----- If URL Encoding Desired, change to: .replace(/\./g, '%2E')
+    .replace(/~/g, '~'); // Convert ~ to ~ (Do Nothing) ----- If URL Encoding Desired, change to: .replace(/~/g, '%7E')
 
-    // Esri ArcGIS Maps (swap order: lng,lat)
-    document.getElementById("sectionDetails4").innerHTML = `
-      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
-      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-      <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Satellite View</a>
-    `;
-    document.getElementById("section4").classList.remove("hidden");
-  }
+  const queryString = encoded;
 
-  searchBtn.addEventListener("click", generateLinks);
+  let directLink1 = 'https://maps.google.com/maps?q=' + queryString;
+  let directLink2 = 'http://maps.google.com/maps?t=k&q=' + queryString;
+  let directLink3 = 'https://maps.apple.com/search?query=' + queryString;
+  let directLink4 = 'https://maps.apple.com/search?query=' + queryString + '&map=hybrid';
+  let directLink5 = 'https://www.bing.com/maps?q=' + queryString;
+  let directLink6 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
+  let directLink7 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + queryString;
+  let directLink8 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + queryString;
 
-  coordInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      generateLinks();
+  // Populate Google Maps
+  document.getElementById("QuerysectionDetails1").innerHTML = `
+    <a href='${directLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink1}' target='_blank'>Google Maps: Map View</a><br><br>
+
+    <a href='${directLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink2}' target='_blank'>Google Maps: Satellite View</a>
+  `;
+
+  // Populate Apple Maps
+  document.getElementById("QuerysectionDetails2").innerHTML = `
+    <a href='${directLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink3}' target='_blank'>Apple Maps: Map View</a><br><br>
+
+    <a href='${directLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink4}' target='_blank'>Apple Maps: Satellite View</a>
+  `;
+
+  // Populate Bing Maps
+  document.getElementById("QuerysectionDetails3").innerHTML = `
+    <a href='${directLink5}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink5}' target='_blank'>Bing Maps: Map View</a><br><br>
+
+    <a href='${directLink6}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink6}' target='_blank'>Bing Maps: Satellite View</a>
+  `;
+
+  // Populate Esri ArcGIS Maps
+  document.getElementById("QuerysectionDetails4").innerHTML = `
+    <a href='${directLink7}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink7}' target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
+
+    <a href='${directLink8}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${directLink8}' target='_blank'>Esri ArcGIS Maps: Satellite View</a>
+  `;
+
+  // Show sections collapsed
+  ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id => {
+    const el = document.getElementById(id);
+    el.classList.remove("hidden");
+    el.open = false;
+  });
+}
+
+// Trigger search on button click
+document.getElementById('searchBtnQuery').addEventListener('click', performSearch);
+
+// Trigger search on pressing Enter in the textbox
+document.getElementById('queryInput').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') performSearch();
+});
+
+// Toggle logic: keep only one open at a time
+["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id => {
+  document.getElementById(id).addEventListener('toggle', function() {
+    if (this.open) {
+      ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(otherId => {
+        if (otherId !== id) document.getElementById(otherId).open = false;
+      });
     }
   });
+});
 
-  clearBtn.addEventListener("click", () => {
-    coordInput.value = "";
-    errorMsg.classList.add("hidden");
-    ["section1","section2","section3","section4"].forEach(id =>
-      document.getElementById(id).classList.add("hidden")
-    );
+// -------------------
+// Search by Coordinates
+// -------------------
+
+const coordInput = document.getElementById("coordInput");
+const clearBtn = document.getElementById("clearBtn");
+const searchBtn = document.getElementById("searchBtn");
+const errorMsg = document.getElementById("errorMsg");
+
+function parseCoordinates(input) {
+  const parts = input.split(",");
+  if (parts.length !== 2) return null;
+  const lat = parseFloat(parts[0].trim());
+  const lng = parseFloat(parts[1].trim());
+  if (isNaN(lat) || isNaN(lng)) return null;
+  return { lat, lng };
+}
+
+function generateLinks() {
+  const coords = parseCoordinates(coordInput.value);
+  if (!coords) {
+    errorMsg.classList.remove("hidden");
+    return;
+  }
+  errorMsg.classList.add("hidden");
+
+  const { lat, lng } = coords;
+
+  // Google Maps
+  document.getElementById("sectionDetails1").innerHTML = `
+    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target='_blank'>Google Maps: Map View</a><br><br>
+    <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target='_blank'>Google Maps: Satellite View</a>
+  `;
+  document.getElementById("section1").classList.remove("hidden");
+  document.getElementById("section1").open = false;
+
+  // Apple Maps
+  document.getElementById("sectionDetails2").innerHTML = `
+    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target='_blank'>Apple Maps: Map View</a><br><br>
+    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target='_blank'>Apple Maps: Satellite View</a>
+  `;
+  document.getElementById("section2").classList.remove("hidden");
+  document.getElementById("section2").open = false;
+
+  // Bing Maps
+  document.getElementById("sectionDetails3").innerHTML = `
+    <a href="https://www.bing.com/maps?q=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://www.bing.com/maps?q=${lat},${lng}" target='_blank'>Bing Maps: Map View</a><br><br>
+    <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target='_blank'>Bing Maps: Satellite View</a>
+  `;
+  document.getElementById("section3").classList.remove("hidden");
+  document.getElementById("section3").open = false;
+
+  // Esri ArcGIS Maps (lng,lat order)
+  document.getElementById("sectionDetails4").innerHTML = `
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Satellite View</a>
+  `;
+  document.getElementById("section4").classList.remove("hidden");
+  document.getElementById("section4").open = false;
+}
+
+searchBtn.addEventListener("click", generateLinks);
+
+coordInput.addEventListener("keypress", e => {
+  if (e.key === "Enter") generateLinks();
+});
+
+clearBtn.addEventListener("click", () => {
+  coordInput.value = "";
+  errorMsg.classList.add("hidden");
+  ["section1","section2","section3","section4"].forEach(id =>
+    document.getElementById(id).classList.add("hidden")
+  );
+});
+
+// Toggle logic: keep only one Coordinates panel open at a time
+["section1","section2","section3","section4"].forEach(id => {
+  document.getElementById(id).addEventListener('toggle', function() {
+    if (this.open) {
+      ["section1","section2","section3","section4"].forEach(otherId => {
+        if (otherId !== id) document.getElementById(otherId).open = false;
+      });
+    }
   });
+});
+
 </script>
+
+
 </body>
 </html>

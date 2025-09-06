@@ -271,8 +271,10 @@ function performSearch() {
   let bingmapsLink2 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
   let esrimapsLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + queryString;
   let esrimapsLink2 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + queryString;
-  let esrimapsLink3 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&search=' + queryString;
-  let esrimapsLink4 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&search=' + queryString;
+  let esrimapsLink3 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&search=' + queryString; // Android App: Search for location (Map View)
+  let esrimapsLink4 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&search=' + queryString; // Android App: Search for location (Satellite View)
+  let esrimapsLink5 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&center=' + queryString + '&scale=3000'; // Android App: Zoom in on location (Map View)
+  let esrimapsLink6 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&center=' + queryString + '&scale=3000'; // Android App: Zoom in on location (Satellite View)
 
   // Populate Google Maps
   document.getElementById("QuerysectionDetails1").innerHTML = `
@@ -313,7 +315,7 @@ function performSearch() {
 
   // Populate Esri ArcGIS Maps
   document.getElementById("QuerysectionDetails4").innerHTML = `
-   <strong>Web Map Links</strong></br></br>
+   <img src="images/webapp.svg" style="width:26px"></a>&nbsp;<strong>Web Map Links</strong></br></br>
    
     <a href='${esrimapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
     <a href='${esrimapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
@@ -323,13 +325,15 @@ function performSearch() {
     
     <img src="images/divider.png"</a><br><br>
    
-   <strong>Android App Links</strong></br></br>
-    	
-    <a href='${esrimapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapsLink3}' target='_blank'>Map View - Query Link</a><br><br>
+   <img src="images/androidapp.svg" style="width:26px"></a>&nbsp;<strong>Android App Links</strong></br></br>
 
-    <a href='${esrimapsLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapsLink4}' target='_blank'>Satellite View - Query Link</a>
+    <img src="images/mapview.svg" style="width:26px"></a>&nbsp;Map View - Query Link</br>
+    <a href='${esrimapsLink3}' target="_blank"><img src="images/esrisearch.png" style="width:26px"></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href='${esrimapsLink5}' target="_blank"><img src="images/esrizoom.png" style="width:26px"></a></br></br>
+
+    <img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;Satellite View - Query Link</br>
+    <a href='${esrimapsLink4}' target="_blank"><img src="images/esrisearch.png" style="width:26px"></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+    <a href='${esrimapsLink6}' target="_blank"><img src="images/esrizoom.png" style="width:26px"></a>
   `;
 
   // Show sections collapsed

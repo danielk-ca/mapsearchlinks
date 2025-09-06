@@ -261,49 +261,69 @@ function performSearch() {
 
   const queryString = encoded;
 
-  let directLink1 = 'https://maps.google.com/maps?q=' + queryString;
-  let directLink2 = 'http://maps.google.com/maps?t=k&q=' + queryString;
-  let directLink3 = 'https://maps.apple.com/search?query=' + queryString;
-  let directLink4 = 'https://maps.apple.com/search?query=' + queryString + '&map=hybrid';
-  let directLink5 = 'https://www.bing.com/maps?q=' + queryString;
-  let directLink6 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
-  let directLink7 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + queryString;
-  let directLink8 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + queryString;
+  let googlemapsLink1 = 'https://maps.google.com/maps?q=' + queryString;
+  let googlemapsLink2 = 'http://maps.google.com/maps?t=k&q=' + queryString;
+  let googlemapsLink3 = 'https://www.google.com/maps/dir/?api=1&destination=' + queryString +'&travelmode=driving&dir_action=navigate';
+  let applemapsLink1 = 'https://maps.apple.com/search?query=' + queryString;
+  let applemapsLink2 = 'https://maps.apple.com/search?query=' + queryString + '&map=hybrid';
+  let bingmapsLink1 = 'https://www.bing.com/maps?q=' + queryString;
+  let bingmapsLink2 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
+  let esrimapsLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + queryString;
+  let esrimapsLink2 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + queryString;
+  let esrimapsLink3 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&search=' + queryString;
+  let esrimapsLink4 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&search=' + queryString;
 
   // Populate Google Maps
   document.getElementById("QuerysectionDetails1").innerHTML = `
-    <a href='${directLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink1}' target='_blank'>Google Maps: Map View</a><br><br>
+    <a href='${googlemapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${googlemapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
 
-    <a href='${directLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink2}' target='_blank'>Google Maps: Satellite View</a>
+    <a href='${googlemapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${googlemapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
+    	
+    <img src="images/divider.png"</a><br><br>
+	
+    <a href='${googlemapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${googlemapsLink3}' target='_blank'>Driving Directions Link</a>    
   `;
 
   // Populate Apple Maps
   document.getElementById("QuerysectionDetails2").innerHTML = `
-    <a href='${directLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink3}' target='_blank'>Apple Maps: Map View</a><br><br>
+    <a href='${applemapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${applemapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
 
-    <a href='${directLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink4}' target='_blank'>Apple Maps: Satellite View</a>
+    <a href='${applemapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${applemapsLink2}' target='_blank'>Satellite View - Query Link</a>
   `;
 
   // Populate Bing Maps
   document.getElementById("QuerysectionDetails3").innerHTML = `
-    <a href='${directLink5}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink5}' target='_blank'>Bing Maps: Map View</a><br><br>
+    <a href='${bingmapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${bingmapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
 
-    <a href='${directLink6}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink6}' target='_blank'>Bing Maps: Satellite View</a>
+    <a href='${bingmapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${bingmapsLink2}' target='_blank'>Satellite View - Query Link</a>
   `;
 
   // Populate Esri ArcGIS Maps
   document.getElementById("QuerysectionDetails4").innerHTML = `
-    <a href='${directLink7}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink7}' target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
+   <strong>Web Map Links</strong></br></br>
+   
+    <a href='${esrimapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
 
-    <a href='${directLink8}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${directLink8}' target='_blank'>Esri ArcGIS Maps: Satellite View</a>
+    <a href='${esrimapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
+    
+    <img src="images/divider.png"</a><br><br>
+   
+   <strong>Android App Links</strong></br></br>
+    	
+    <a href='${esrimapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink3}' target='_blank'>Map View - Query Link</a><br><br>
+
+    <a href='${esrimapsLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink4}' target='_blank'>Satellite View - Query Link</a>
   `;
 
   // Show sections collapsed

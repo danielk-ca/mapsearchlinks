@@ -266,6 +266,7 @@ function performSearch() {
   let googlemapsLink3 = 'https://www.google.com/maps/dir/?api=1&destination=' + queryString +'&travelmode=driving&dir_action=navigate';
   let applemapsLink1 = 'https://maps.apple.com/search?query=' + queryString;
   let applemapsLink2 = 'https://maps.apple.com/search?query=' + queryString + '&map=hybrid';
+  let applemapsLink3 ='https://maps.apple.com/directions?destination=' + queryString + '&mode=driving';
   let bingmapsLink1 = 'https://www.bing.com/maps?q=' + queryString;
   let bingmapsLink2 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
   let esrimapsLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + queryString;
@@ -293,7 +294,12 @@ function performSearch() {
     <a href='${applemapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
 
     <a href='${applemapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${applemapsLink2}' target='_blank'>Satellite View - Query Link</a>
+    <a href='${applemapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
+    
+    <img src="images/divider.png"</a><br><br>
+	
+    <a href='${applemapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${applemapsLink3}' target='_blank'>Driving Directions Link</a>    
   `;
 
   // Populate Bing Maps

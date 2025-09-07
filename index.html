@@ -148,28 +148,36 @@
     <div class="details-info" id="QuerysectionDetails1"></div>
   </details>
 
-  <!-- Apple Maps -->
+  <!-- Waze Maps -->
   <details id="Querysection2" class="hidden">
     <summary>
-        <img src="images/applemaps.png" style="height:26px;">
+        <img src="images/wazemaps.png" style="height:26px;">
     </summary>
     <div class="details-info" id="QuerysectionDetails2"></div>
   </details>
 
-  <!-- Bing Maps -->
+  <!-- Apple Maps -->
   <details id="Querysection3" class="hidden">
     <summary>
-        <img src="images/bingmaps.png" style="height:26px;">
+        <img src="images/applemaps.png" style="height:26px;">
     </summary>
     <div class="details-info" id="QuerysectionDetails3"></div>
   </details>
 
-  <!-- Esri ArcGIS Maps -->
+  <!-- Bing Maps -->
   <details id="Querysection4" class="hidden">
+    <summary>
+        <img src="images/bingmaps.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails4"></div>
+  </details>
+
+  <!-- Esri ArcGIS Maps -->
+  <details id="Querysection5" class="hidden">
     <summary>
         <img src="images/arcgismaps.png" style="height:26px;">
     </summary>
-    <div class="details-info" id="QuerysectionDetails4"></div>
+    <div class="details-info" id="QuerysectionDetails5"></div>
   </details>
 
 <hr/>
@@ -237,7 +245,7 @@ document.getElementById('clearBtnQuery').addEventListener('click', function() {
   // Clear the textbox
   document.getElementById('queryInput').value = '';
   // Hide collapsible sections
-  ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id =>
+  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id =>
     document.getElementById(id).classList.add("hidden")
   );
 });
@@ -249,11 +257,13 @@ function performSearch() {
 
   // Detect coordinates of form "lat,lng" or "lat, lng"
   let reversedCoords = null;
+  let wazewithCoords = null;
   const coordMatch = textInput.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/);
   if (coordMatch) {
     const lat = coordMatch[1];
     const lng = coordMatch[3];
     reversedCoords = `${lng},${lat}`;
+    wazewithCoords = `https://www.waze.com/ul?ll=${lat}%2C${lng}&navigate=yes`;
   }
 
   // Encode query
@@ -269,11 +279,17 @@ function performSearch() {
     .replace(/~/g, '~');
 
   const queryString = encoded;
-
+  const wazewithoutCoords = `https://waze.com/ul?q=${queryString}&navigate=yes`;
+  
   // Esri needs reversed coordinates if it's a coordinate input
-  const esriQueryString = reversedCoords 
+  const esriQueryString = reversedCoords
     ? encodeURIComponent(reversedCoords) 
     : queryString;
+
+  // Waze: With coordinates link or Without coordinates link
+  const wazeLink = wazewithCoords
+    ? (wazewithCoords)
+    : wazewithoutCoords;
 
   let googlemapsLink1 = 'https://maps.google.com/maps?q=' + queryString;
   let googlemapsLink2 = 'http://maps.google.com/maps?t=k&q=' + queryString;
@@ -285,73 +301,87 @@ function performSearch() {
   let bingmapsLink2 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
   let esrimapsLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + esriQueryString;
   let esrimapsLink2 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + esriQueryString;
+  let esrimapsLink7 = 'https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps2.simcoe.ca/arcgis/rest/services/Public/Ortho_2024_Cache/MapServer&source=sd&find=' + esriQueryString;
+  let esrimapsLink8 = 'https://www.arcgis.com/apps/mapviewer/index.html?url=https://gisapps.barrie.ca/image/rest/services/Public/Barrie_Ortho_2024_10cm_Cache_WebMercator/MapServer&find=' + esriQueryString;
   let esrimapsLink3 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&search=' + queryString; // Android App: Search for location (Map View)
-  let esrimapsLink4 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&search=' + queryString; // Android App: Search for location (Satellite View)
+  let esrimapsLink4 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&search=' + queryString; // Android App: Search for location (Aerial View)
   let esrimapsLink5 = 'https://explorer.arcgis.app?itemID=55ebf90799fa4a3fa57562700a68c405&center=' + queryString + '&scale=3000'; // Android App: Zoom in on location (Map View)
-  let esrimapsLink6 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&center=' + queryString + '&scale=3000'; // Android App: Zoom in on location (Satellite View)
+  let esrimapsLink6 = 'https://explorer.arcgis.app?itemID=28f49811a6974659988fd279de5ce39f&center=' + queryString + '&scale=3000'; // Android App: Zoom in on location (Aerial View)
 
   // Populate Google Maps
   document.getElementById("QuerysectionDetails1").innerHTML = `
     <a href='${googlemapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${googlemapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
+    <a href='${googlemapsLink1}' target='_blank'>Map View: Search Link</a><br><br>
 
     <a href='${googlemapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${googlemapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
+    <a href='${googlemapsLink2}' target='_blank'>Aerial View: Search Link</a><br><br>
     	
     <img src="images/divider.png"</a><br><br>
 	
     <a href='${googlemapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${googlemapsLink3}' target='_blank'>Driving Directions Link</a>    
+    <a href='${googlemapsLink3}' target='_blank'>Driving Directions Link</a>
+  `;
+
+  // Populate Waze Maps
+  document.getElementById("QuerysectionDetails2").innerHTML = `
+    <a href='${wazeLink}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${wazeLink}' target='_blank'>Driving Directions Link</a>
   `;
 
   // Populate Apple Maps
-  document.getElementById("QuerysectionDetails2").innerHTML = `
+  document.getElementById("QuerysectionDetails3").innerHTML = `
     <a href='${applemapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${applemapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
+    <a href='${applemapsLink1}' target='_blank'>Map View: Search Link</a><br><br>
 
     <a href='${applemapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${applemapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
+    <a href='${applemapsLink2}' target='_blank'>Aerial View: Search Link</a><br><br>
     
     <img src="images/divider.png"</a><br><br>
 	
     <a href='${applemapsLink3}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${applemapsLink3}' target='_blank'>Driving Directions Link</a>    
+    <a href='${applemapsLink3}' target='_blank'>Driving Directions Link</a>
   `;
 
   // Populate Bing Maps
-  document.getElementById("QuerysectionDetails3").innerHTML = `
+  document.getElementById("QuerysectionDetails4").innerHTML = `
     <a href='${bingmapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${bingmapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
+    <a href='${bingmapsLink1}' target='_blank'>Map View: Search Link</a><br><br>
 
     <a href='${bingmapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${bingmapsLink2}' target='_blank'>Satellite View - Query Link</a>
+    <a href='${bingmapsLink2}' target='_blank'>Aerial View: Search Link</a>
   `;
 
   // Populate Esri ArcGIS Maps
-  document.getElementById("QuerysectionDetails4").innerHTML = `
+  document.getElementById("QuerysectionDetails5").innerHTML = `
    <img src="images/webapp.svg" style="width:26px"></a>&nbsp;<strong>Web Map Links</strong></br></br>
    
     <a href='${esrimapsLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapsLink1}' target='_blank'>Map View - Query Link</a><br><br>
+    <a href='${esrimapsLink1}' target='_blank'>Map View: Search Link</a><br><br>
 
     <a href='${esrimapsLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapsLink2}' target='_blank'>Satellite View - Query Link</a><br><br>
-    
+    <a href='${esrimapsLink2}' target='_blank'>Aerial View: Search Link</a><br><br>
+
+    <a href='${esrimapsLink7}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink7}' target='_blank'>Simcoe County, ON Aerial View (2024): Search Link</a><br><br>
+
+    <a href='${esrimapsLink8}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrimapsLink8}' target='_blank'>Barrie, ON Aerial View (2024): Search Link</a><br><br>
+
     <img src="images/divider.png"</a><br><br>
    
    <img src="images/androidapp.svg" style="width:26px"></a>&nbsp;<strong>Android App Links</strong></br></br>
 
-    <img src="images/mapview.svg" style="width:26px"></a>&nbsp;Map View - Query Link</br>
+    <img src="images/mapview.svg" style="width:26px"></a>&nbsp;Map View: Search Link</br>
     <a href='${esrimapsLink3}' target="_blank"><img src="images/esrisearch.png" style="width:26px"></a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a href='${esrimapsLink5}' target="_blank"><img src="images/esrizoom.png" style="width:26px"></a></br></br>
 
-    <img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;Satellite View - Query Link</br>
+    <img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;Aerial View: Search Link</br>
     <a href='${esrimapsLink4}' target="_blank"><img src="images/esrisearch.png" style="width:26px"></a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a href='${esrimapsLink6}' target="_blank"><img src="images/esrizoom.png" style="width:26px"></a>
   `;
 
   // Show sections collapsed
-  ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id => {
+  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove("hidden");
     el.open = false;
@@ -367,10 +397,10 @@ document.getElementById('queryInput').addEventListener('keydown', function(event
 });
 
 // Toggle logic: keep only one open at a time
-["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(id => {
+["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id => {
   document.getElementById(id).addEventListener('toggle', function() {
     if (this.open) {
-      ["Querysection1","Querysection2","Querysection3","Querysection4"].forEach(otherId => {
+      ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(otherId => {
         if (otherId !== id) document.getElementById(otherId).open = false;
       });
     }
@@ -410,7 +440,7 @@ function generateLinks() {
     <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
     <a href="https://www.google.com/maps/search/?api=1&query=${lat},${lng}" target='_blank'>Google Maps: Map View</a><br><br>
     <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target='_blank'>Google Maps: Satellite View</a>
+    <a href="http://maps.google.com/maps?t=k&q=loc:${lat}+${lng}" target='_blank'>Google Maps: Aerial View</a>
   `;
   document.getElementById("section1").classList.remove("hidden");
   document.getElementById("section1").open = false;
@@ -420,7 +450,7 @@ function generateLinks() {
     <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
     <a href="https://maps.apple.com/place?coordinate=${lat},${lng}" target='_blank'>Apple Maps: Map View</a><br><br>
     <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target='_blank'>Apple Maps: Satellite View</a>
+    <a href="https://maps.apple.com/place?coordinate=${lat},${lng}&map=hybrid" target='_blank'>Apple Maps: Aerial View</a>
   `;
   document.getElementById("section2").classList.remove("hidden");
   document.getElementById("section2").open = false;
@@ -430,7 +460,7 @@ function generateLinks() {
     <a href="https://www.bing.com/maps?q=${lat},${lng}" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
     <a href="https://www.bing.com/maps?q=${lat},${lng}" target='_blank'>Bing Maps: Map View</a><br><br>
     <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target='_blank'>Bing Maps: Satellite View</a>
+    <a href="https://www.bing.com/maps?q=${lat},${lng}&style=h" target='_blank'>Bing Maps: Aerial View</a>
   `;
   document.getElementById("section3").classList.remove("hidden");
   document.getElementById("section3").open = false;
@@ -440,7 +470,7 @@ function generateLinks() {
     <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
     <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Map View</a><br><br>
     <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Satellite View</a>
+    <a href="https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=16" target='_blank'>Esri ArcGIS Maps: Aerial View</a>
   `;
   document.getElementById("section4").classList.remove("hidden");
   document.getElementById("section4").open = false;

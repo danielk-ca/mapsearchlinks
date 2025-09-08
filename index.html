@@ -180,6 +180,14 @@
     <div class="details-info" id="QuerysectionDetails5"></div>
   </details>
 
+  <!-- Aerial Imagery Source -->
+  <details id="Querysection6" class="hidden">
+    <summary>
+        <img src="images/aerialimagerysource.png" style="height:26px;">
+    </summary>
+    <div class="details-info" id="QuerysectionDetails6"></div>
+  </details>
+
 <hr/>
 
 <h4><b><span style='background:rgb(169, 213, 181)'>Search by Coordinates</span></b></h4>
@@ -251,7 +259,7 @@ document.getElementById('clearBtnQuery').addEventListener('click', function() {
   // Clear the textbox
   document.getElementById('queryInput').value = '';
   // Hide collapsible sections
-  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id =>
+  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5","Querysection6"].forEach(id =>
     document.getElementById(id).classList.add("hidden")
   );
 });
@@ -264,12 +272,28 @@ function performSearch() {
   // Detect coordinates of form "lat,lng" or "lat, lng"
   let reversedCoords = null;
   let wazewithCoords = null;
+  let esriwithCoords1 = null;
+  let esriwithCoords2 = null;
+  let esriwithCoords3 = null;
+  let esrigovwithCoords1 = null;
+  let esrigovwithCoords2 = null;
+  let esrigovwithCoords3 = null;
+  let esrigovwithCoords4 = null;
+  let esrigovwithCoords5 = null;
   const coordMatch = textInput.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/);
   if (coordMatch) {
     const lat = coordMatch[1];
     const lng = coordMatch[3];
     reversedCoords = `${lng},${lat}`;
     wazewithCoords = `https://www.waze.com/ul?ll=${lat}%2C${lng}&navigate=yes`;
+    esriwithCoords1 = `https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esriwithCoords2 = `https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esriwithCoords3 = `https://livingatlas.arcgis.com/wayback/#mapCenter=${lng}%2C${lat}%2C19`;
+    esrigovwithCoords1 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps2.simcoe.ca/arcgis/rest/services/Public/Ortho_2024_Cache/MapServer&source=sd&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esrigovwithCoords2 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://gisapps.barrie.ca/image/rest/services/Public/Barrie_Ortho_2024_10cm_Cache_WebMercator/MapServer&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esrigovwithCoords3 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://exwai.maps.mississauga.ca/img/rest/services/Imagery/2024_Aerial_Imagery/ImageServer&source=sd&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esrigovwithCoords4 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps1.brampton.ca/image/rest/services/Imagery/BRAM2025S_SID_MOSAIC/ImageServer&source=sd&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
+    esrigovwithCoords5 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://gis.toronto.ca/arcgis/rest/services/basemap/cot_ortho_2024_color_8cm/MapServer&source=sd&marker=${lng},${lat}&center=${lng},${lat}&level=18`;
   }
 
   // Encode query
@@ -286,16 +310,64 @@ function performSearch() {
 
   const queryString = encoded;
   const wazewithoutCoords = `https://waze.com/ul?q=${queryString}&navigate=yes`;
+  const esriwithoutCoords1 = `https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=${queryString}`;
+  const esriwithoutCoords2 = `https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=${queryString}`;
+  const esriwithoutCoords3 = `https://livingatlas.arcgis.com/wayback/`;
+  const esrigovwithoutCoords1 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps2.simcoe.ca/arcgis/rest/services/Public/Ortho_2024_Cache/MapServer&source=sd&find=${queryString}`;
+  const esrigovwithoutCoords2 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://gisapps.barrie.ca/image/rest/services/Public/Barrie_Ortho_2024_10cm_Cache_WebMercator/MapServer&find=${queryString}`;
+  const esrigovwithoutCoords3 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://exwai.maps.mississauga.ca/img/rest/services/Imagery/2024_Aerial_Imagery/ImageServer&source=sd&find=${queryString}`;
+  const esrigovwithoutCoords4 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps1.brampton.ca/image/rest/services/Imagery/BRAM2025S_SID_MOSAIC/ImageServer&source=sd&find=${queryString}`;
+  const esrigovwithoutCoords5 = `https://www.arcgis.com/apps/mapviewer/index.html?url=https://gis.toronto.ca/arcgis/rest/services/basemap/cot_ortho_2024_color_8cm/MapServer&source=sd&find=${queryString}`;
   
   // Esri needs reversed coordinates if it's a coordinate input
   const esriQueryString = reversedCoords
     ? encodeURIComponent(reversedCoords) 
     : queryString;
 
-  // Waze: With coordinates link or Without coordinates link
+  // Waze (With coordinates or without link)
   const wazeLink = wazewithCoords
     ? (wazewithCoords)
     : wazewithoutCoords;
+
+  // Esri (With coordinates or without link): Web Map Link - Map View
+  const esriLink1 = esriwithCoords1
+    ? (esriwithCoords1)
+    : esriwithoutCoords1;
+
+  // Esri (With coordinates or without link): Web Map Link - Aerial View
+  const esriLink2 = esriwithCoords2
+    ? (esriwithCoords2)
+    : esriwithoutCoords2;
+
+  // Esri (With coordinates or without link): Web Map Link - Wayback Aerial View
+  const esriLink3 = esriwithCoords3
+    ? (esriwithCoords3)
+    : esriwithoutCoords3;
+
+  // Esri Gov (With coordinates or without link): Web Map Link - Aerial View
+  const esrigovLink1 = esrigovwithCoords1
+    ? (esrigovwithCoords1)
+    : esrigovwithoutCoords1;
+
+  // Esri Gov (With coordinates or without link): Web Map Link - Aerial View
+  const esrigovLink2 = esrigovwithCoords2
+    ? (esrigovwithCoords2)
+    : esrigovwithoutCoords2;
+
+  // Esri Gov (With coordinates or without link): Web Map Link - Aerial View
+  const esrigovLink3 = esrigovwithCoords3
+    ? (esrigovwithCoords3)
+    : esrigovwithoutCoords3;
+
+  // Esri Gov (With coordinates or without link): Web Map Link - Aerial View
+  const esrigovLink4 = esrigovwithCoords4
+    ? (esrigovwithCoords4)
+    : esrigovwithoutCoords4;
+
+  // Esri Gov (With coordinates or without link): Web Map Link - Aerial View
+  const esrigovLink5 = esrigovwithCoords5
+    ? (esrigovwithCoords5)
+    : esrigovwithoutCoords5;
 
   let googlemapsLink1 = 'https://maps.google.com/maps?q=' + queryString;
   let googlemapsLink2 = 'http://maps.google.com/maps?t=k&q=' + queryString;
@@ -305,10 +377,6 @@ function performSearch() {
   let applemapsLink3 ='https://maps.apple.com/directions?destination=' + queryString + '&mode=driving';
   let bingmapsLink1 = 'https://www.bing.com/maps?q=' + queryString;
   let bingmapsLink2 = 'https://www.bing.com/maps?q=' + queryString + '&style=h';
-
-  let esrimapswebLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=55ebf90799fa4a3fa57562700a68c405&find=' + esriQueryString;
-  let esrimapswebLink2 = 'https://www.arcgis.com/apps/mapviewer/index.html?webmap=28f49811a6974659988fd279de5ce39f&find=' + esriQueryString;
-  let esrimapswebLink3 = 'https://livingatlas.arcgis.com/wayback/#mapCenter=' + esriQueryString + '%2C19';  
 
   let esrimapswebgovLink1 = 'https://www.arcgis.com/apps/mapviewer/index.html?url=https://maps2.simcoe.ca/arcgis/rest/services/Public/Ortho_2024_Cache/MapServer&source=sd&find=' + esriQueryString;  // Web Map: Search for location (Simcoe County, ON Aerial View 2024)
   let esrimapswebgovLink2 = 'https://www.arcgis.com/apps/mapviewer/index.html?url=https://gisapps.barrie.ca/image/rest/services/Public/Barrie_Ortho_2024_10cm_Cache_WebMercator/MapServer&find=' + esriQueryString; // Web Map: Search for location (Barrie, ON Aerial View 2024)
@@ -380,36 +448,20 @@ function performSearch() {
   `;
 
   // Populate Esri ArcGIS Maps
+      // • Map layer provides one meter or better satellite and aerial imagery for most of the world's landmass and lower resolution satellite imagery worldwide
+      // • Where available, high-resolution aerial photography comes directly from authoritative data sources: Cities, Counties, States, campuses, nations, and from local crowdsourced content
+      // • Typically within 3-5 years of currency, for most of the world
   document.getElementById("QuerysectionDetails5").innerHTML = `
-   <img src="images/webapp.svg" style="width:26px"></a>&nbsp;<strong>Web Map Links</strong></br></br>
+    <img src="images/webapp.svg" style="width:26px"></a>&nbsp;<strong>Web Map Links</strong></br></br>
    
-    <a href='${esrimapswebLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebLink1}' target='_blank'>Map View: Search Link</a><br><br>
+    <a href='${esriLink1}' target="_blank"><img src="images/mapview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esriLink1}' target='_blank'>Map View: Search Link</a><br><br>
 
-    <a href='${esrimapswebLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebLink2}' target='_blank'>Aerial View: Search Link</a><br><br>
+    <a href='${esriLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esriLink2}' target='_blank'>Aerial View: Search Link</a><br><br>
 
-    <a href='${esrimapswebLink3}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebLink3}' target='_blank'>Wayback Aerial View: Search Link</a><br><br>
-
-    <img src="images/halfdivider.png"</a><br><br>
-
-    <strong>Government Orthoimagery (Aerial Imagery)</strong></br></br>
-
-    <a href='${esrimapswebgovLink1}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebgovLink1}' target='_blank'>Simcoe County, ON Aerial View (2024): Search Link</a><br><br>
-
-    <a href='${esrimapswebgovLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebgovLink2}' target='_blank'>Barrie, ON Aerial View (2024): Search Link</a><br><br>
-
-    <a href='${esrimapswebgovLink3}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebgovLink3}' target='_blank'>Mississauga, ON Aerial View (2024): Search Link</a><br><br>
-
-    <a href='${esrimapswebgovLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebgovLink4}' target='_blank'>Brampton, ON Aerial View (2025): Search Link</a><br><br>
-
-    <a href='${esrimapswebgovLink5}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
-    <a href='${esrimapswebgovLink5}' target='_blank'>Toronto, ON Aerial View (2024): Search Link</a><br><br>
+    <a href='${esriLink3}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esriLink3}' target='_blank'>Wayback Aerial View: Search Link</a><br><br>
 
     <img src="images/divider.png"</a><br><br>
    
@@ -424,8 +476,27 @@ function performSearch() {
     <a href='${esrimapsappLink4}' target="_blank"><img src="images/esrizoom.png" style="width:26px"></a>
   `;
 
+  // Populate Esri ArcGIS Maps
+  document.getElementById("QuerysectionDetails6").innerHTML = `
+    <strong>Government Orthoimagery (Aerial Imagery)</strong></br></br>
+    <a href='${esrigovLink1}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrigovLink1}' target='_blank'>Simcoe County, ON Aerial View (2024): Search Link</a><br><br>
+
+    <a href='${esrigovLink2}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrigovLink2}' target='_blank'>Barrie, ON Aerial View (2024): Search Link</a><br><br>
+
+    <a href='${esrigovLink3}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrigovLink3}' target='_blank'>Mississauga, ON Aerial View (2024): Search Link</a><br><br>
+
+    <a href='${esrigovLink4}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrigovLink4}' target='_blank'>Brampton, ON Aerial View (2025): Search Link</a><br><br>
+
+    <a href='${esrigovLink5}' target="_blank"><img src="images/satelliteview.svg" style="width:26px"></a>&nbsp;
+    <a href='${esrigovLink5}' target='_blank'>Toronto, ON Aerial View (2024): Search Link</a>
+  `;
+
   // Show sections collapsed
-  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id => {
+  ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5",,"Querysection6"].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove("hidden");
     el.open = false;
@@ -441,10 +512,10 @@ document.getElementById('queryInput').addEventListener('keydown', function(event
 });
 
 // Toggle logic: keep only one open at a time
-["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(id => {
+["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5","Querysection6"].forEach(id => {
   document.getElementById(id).addEventListener('toggle', function() {
     if (this.open) {
-      ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5"].forEach(otherId => {
+      ["Querysection1","Querysection2","Querysection3","Querysection4","Querysection5","Querysection6"].forEach(otherId => {
         if (otherId !== id) document.getElementById(otherId).open = false;
       });
     }
